@@ -17,7 +17,7 @@ public class Main {
         case 2:
           logarConta();
           break;
-        case 3:
+        case 4:
           return;
       }
     }
@@ -47,9 +47,11 @@ public class Main {
 
     boolean encontrada = false;
     int index = 0;
+    int indexConta = 0;
     for (Cliente cliente : clientes) {
       if (cliente.getCpf().equals(cpf)) {
-        encontrada = true; 
+        encontrada = true;
+        indexConta = index;
       }
       index++;
     }
@@ -58,9 +60,73 @@ public class Main {
     if (encontrada == false) {
       System.out.println("Conta nao encontrada. Verifique o CPF e tente novamente.");
     } else {
-      clienteLogado = clientes.get(index-1);
+      clienteLogado = clientes.get(indexConta);
+
       System.out.println("Cliente conectado: " + clienteLogado.getNome());
+      
+      Menu logadoMenu =  new Menu("Realizar operação", Arrays.asList("Sacar", "Transfericia TED","Voltar"));
+      switch(logadoMenu.getSelection()){
+       case 1:
+          sacar();
+          break;
+        case 2:
+          trasferenciaTed();
+          break;  
+      }
     }
+
+  }
+  public static void sacar(){
+
+    Scanner s = new Scanner(System.in);
+    System.out.println("Informe o valor do saque :");
+    double valor = Double.parseDouble(s.nextLine());
+    System.out.println(valor);
+
+    if(clienteLogado.getSaldo() > valor ){
+      double saldo = clienteLogado.getSaldo() - valor;
+      clienteLogado.setSaldo(saldo);
+      for (Cliente cliente : clientes){
+        if (cliente.getCpf().equals(clienteLogado.getCpf())) {
+          cliente.setSaldo(saldo); 
+      }
+
+    } 
+      System.out.println("Saque Realizado");
+      System.out.println("Cliente: " + clienteLogado.getNome()); 
+      System.out.println("Novo Saldo : " + clienteLogado.getSaldo());
+
+      return; 
+    }
+    System.out.println("Saldo insulficiente\n");
   }
 
+  public static void trasferenciaTed(){
+    Scanner s = new Scanner(System.in);
+    System.out.println("Conta Destino :");
+    String cpfDestino = s.nextLine();
+    System.out.println("Valor da Transferencia:");
+    double valor = Double.parseDouble(s.nextLine());
+    if(clienteLogado.getCpf().equals(cpfDestino)){
+      System.out.println("Impossivel realizar transferencia: CPF de destino igual o de origem");
+      return;
+    }
+
+    if(clienteLogado.getSaldo() > valor ){
+      double saldo = clienteLogado.getSaldo() - valor;
+      clienteLogado.setSaldo(saldo);
+      for (Cliente cliente : clientes){
+        if (cliente.getCpf().equals(cpfDestino)) {
+          cliente.setSaldo( cliente.getSaldo() + valor);
+          System.out.println("Transferencia Realizada do cliente " + clienteLogado.getNome() + " para o cliente " + cliente.getNome());
+          return;
+      }   
+        
+    }
+    System.out.println("Cliente destino com CPF" + cpfDestino + "nao localizado");
+    return;
+    }
+    System.out.println("Saldo cliente" + clienteLogado.getNome() + "insulficiente");
+  }
 }
+
