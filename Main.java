@@ -64,7 +64,7 @@ public class Main {
 
       System.out.println("Cliente conectado: " + clienteLogado.getNome());
       
-      Menu logadoMenu =  new Menu("Realizar operação", Arrays.asList("Sacar", "Transfericia TED","Voltar"));
+      Menu logadoMenu =  new Menu("Realizar operação", Arrays.asList("Sacar", "Transfericia TED","Pagar fatura","Voltar"));
       switch(logadoMenu.getSelection()){
        case 1:
           sacar();
@@ -72,6 +72,9 @@ public class Main {
         case 2:
           trasferenciaTed();
           break;  
+        case 3:
+          pagarFatura();
+          break;
       }
     }
 
@@ -127,6 +130,19 @@ public class Main {
     return;
     }
     System.out.println("Saldo cliente" + clienteLogado.getNome() + "insulficiente");
+  }
+  public static void pagarFatura(){
+    Scanner s = new Scanner(System.in);
+    System.out.println("Valor do pagamento: ");
+    double valor = Double.parseDouble(s.nextLine());
+    clienteLogado.setValorFatura(clienteLogado.getValorFatura()-valor);
+
+    for (Cliente cliente : clientes){
+      if (clienteLogado.getCpf().equals(cliente.getCpf())) {
+        cliente.setValorFatura(cliente.getValorFatura() - valor);
+      }
+    }   
+    System.out.println("Fatura paga com sucesso.");
   }
 }
 
