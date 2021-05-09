@@ -17,7 +17,7 @@ public class Main {
         case 2:
           logarConta();
           break;
-        case 3:
+        case 4:
           return;
       }
     }
@@ -59,8 +59,48 @@ public class Main {
       System.out.println("Conta nao encontrada. Verifique o CPF e tente novamente.");
     } else {
       clienteLogado = clientes.get(index-1);
+
       System.out.println("Cliente conectado: " + clienteLogado.getNome());
+      
+      Menu logadoMenu =  new Menu("Realizar operação", Arrays.asList("Sacar", "Transfericia TED","Voltar"));
+      switch(logadoMenu.getSelection()){
+       case 1:
+          sacar();
+          break;
+        case 2:
+          return;  
+      }
     }
+
+  }
+  public static void sacar(){
+
+    Scanner s = new Scanner(System.in);
+    System.out.println("Informe o valor do saque :");
+    double valor = Double.parseDouble(s.nextLine());
+    System.out.println(valor);
+
+    if(clienteLogado.getSaldo() > valor ){
+      double saldo = clienteLogado.getSaldo() - valor;
+      clienteLogado.setSaldo(saldo);
+      for (Cliente cliente : clientes){
+        if (cliente.getCpf().equals(clienteLogado.getCpf())) {
+          cliente.setSaldo(saldo); 
+      }
+
+      } 
+      System.out.println("Saque Realizado");
+      System.out.println("Cliente: " + clienteLogado.getNome()); 
+      System.out.println("Novo Saldo : " + clienteLogado.getSaldo());
+
+      return; 
+    }
+    System.out.println("Saldo insulficiente\n");
+
+    
   }
 
+
+  
+  
 }
