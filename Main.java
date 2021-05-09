@@ -5,17 +5,22 @@ import java.util.Scanner;
 
 public class Main {
   static ArrayList<Cliente> clientes = new ArrayList<Cliente>();
+  static Cliente clienteLogado = null;
 	public static void main(String[] args) {
-		Menu mainMenu =  new Menu("Menu Principal", Arrays.asList("Criar conta"));
-
-    switch (mainMenu.getSelection()) {
-      case 1:
-        criarConta();
-        break;
+		Menu mainMenu =  new Menu("Menu Principal", Arrays.asList("Criar conta", "Logar conta", "Sair"));
+    
+    while(true) {
+      switch (mainMenu.getSelection()) {
+        case 1:
+          criarConta();
+          break;
+        case 2:
+          logarConta();
+          break;
+        case 3:
+          return;
+      }
     }
-
-		System.out.println(mainMenu.getSelection() + "foi selecionada");
-		System.out.println("Fim");
 	}
 
   public static void criarConta() {
@@ -33,6 +38,29 @@ public class Main {
 
     Cliente cliente = new Cliente(nome, numeroConta, cpf, saldo, valorFatura);
     clientes.add(cliente);
+  }
+
+  public static void logarConta() {
+    Scanner s = new Scanner(System.in);
+    System.out.println("Informe o CPF:");
+    String cpf = s.nextLine();
+
+    boolean encontrada = false;
+    int index = 0;
+    for (Cliente cliente : clientes) {
+      if (cliente.getCpf().equals(cpf)) {
+        encontrada = true; 
+      }
+      index++;
+    }
+    System.out.println(index);
+
+    if (encontrada == false) {
+      System.out.println("Conta nao encontrada. Verifique o CPF e tente novamente.");
+    } else {
+      clienteLogado = clientes.get(index-1);
+      System.out.println("Cliente conectado: " + clienteLogado.getNome());
+    }
   }
 
 }
