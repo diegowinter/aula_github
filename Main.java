@@ -64,7 +64,7 @@ public class Main {
 
       System.out.println("Cliente conectado: " + clienteLogado.getNome());
       
-      Menu logadoMenu =  new Menu("Realizar operação", Arrays.asList("Sacar", "Transfericia TED","Pagar fatura","Voltar"));
+      Menu logadoMenu =  new Menu("Realizar operação", Arrays.asList("Sacar", "Transfericia TED","Pagar fatura","Gerar cartao virtual","Voltar"));
       switch(logadoMenu.getSelection()){
        case 1:
           sacar();
@@ -75,6 +75,9 @@ public class Main {
         case 3:
           pagarFatura();
           break;
+        case 4:
+          gerarCartao();
+          break;  
       }
     }
 
@@ -143,6 +146,15 @@ public class Main {
       }
     }   
     System.out.println("Fatura paga com sucesso.");
+  }
+
+  public static void gerarCartao(){
+    Random random = new Random();
+    String cartao = "";
+    for(int i=0; i<4; i++){
+      cartao += " "+String.valueOf(random.nextInt(9999));
+    }
+    System.out.println("Cartao: " + cartao);
   }
 }
 
