@@ -64,7 +64,7 @@ public class Main {
 
       System.out.println("Cliente conectado: " + clienteLogado.getNome());
       
-      Menu logadoMenu =  new Menu("Realizar operação", Arrays.asList("Sacar", "Transfericia TED","Pagar fatura","Gerar cartao virtual","Voltar"));
+      Menu logadoMenu =  new Menu("Realizar operação", Arrays.asList("Sacar", "Transfericia TED","Pagar fatura","Gerar cartao virtual","Gerar boleto de deposito","Voltar"));
       switch(logadoMenu.getSelection()){
        case 1:
           sacar();
@@ -77,6 +77,9 @@ public class Main {
           break;
         case 4:
           gerarCartao();
+          break;
+        case 5:
+          gerarBoletoDeDeposito();
           break;  
       }
     }
@@ -155,6 +158,18 @@ public class Main {
       cartao += " "+String.valueOf(random.nextInt(9999));
     }
     System.out.println("Cartao: " + cartao);
+  }
+
+  public static void gerarBoletoDeDeposito() {
+    Scanner s = new Scanner(System.in);
+    System.out.println("Quanto você quer depositar? ");
+    double valor = Double.parseDouble(s.nextLine());
+    Random random = new Random();
+    String boleto = "";
+    for (int i=0; i<8; i++) {
+      boleto += String.valueOf(random.nextInt(9999));
+    }
+    System.out.println("Seu boleto de R$" + valor + " está pronto para pagamento:\n" + boleto);
   }
 }
 
