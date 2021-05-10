@@ -64,7 +64,7 @@ public class Main {
 
       System.out.println("Cliente conectado: " + clienteLogado.getNome());
       
-      Menu logadoMenu =  new Menu("Realizar operação", Arrays.asList("Sacar", "Transfericia TED","Pagar fatura","Gerar cartao virtual","Gerar boleto de deposito","Voltar"));
+      Menu logadoMenu =  new Menu("Realizar operação", Arrays.asList("Sacar", "Transfericia TED","Pagar fatura","Gerar cartao virtual","Gerar boleto de deposito","Realizar pagamento atraves do PIX","Voltar"));
       switch(logadoMenu.getSelection()){
        case 1:
           sacar();
@@ -80,6 +80,9 @@ public class Main {
           break;
         case 5:
           gerarBoletoDeDeposito();
+          break;
+        case 6:
+          pagarViaPix();
           break;  
       }
     }
@@ -170,6 +173,27 @@ public class Main {
       boleto += String.valueOf(random.nextInt(9999));
     }
     System.out.println("Seu boleto de R$" + valor + " está pronto para pagamento:\n" + boleto);
+  }
+
+  public static void pagarViaPix() {
+    Scanner s = new Scanner(System.in);
+    System.out.println("Digite a chave de destino: ");
+    String chave = s.nextLine();
+    System.out.println("Quanto você quer enviar? ");
+    double valor = Double.parseDouble(s.nextLine());
+
+    if(clienteLogado.getSaldo() > valor ){
+      double saldo = clienteLogado.getSaldo() - valor;
+      clienteLogado.setSaldo(saldo);
+      for (Cliente cliente : clientes){
+        if (cliente.getCpf().equals(clienteLogado.getCpf())) {
+          cliente.setSaldo(saldo);
+          System.out.println("Transferencia de R$" + valor + " realizada, chave " + chave);
+          return;
+        }
+      }
+    }
+    System.out.println("Saldo cliente " + clienteLogado.getNome() + " insuficiente");
   }
 }
 
